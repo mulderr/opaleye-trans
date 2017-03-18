@@ -27,6 +27,7 @@ module Opaleye.Trans
 
     , -- * Updates
       update
+    , updateEasy
     , updateReturning
     , updateReturningFirst
 
@@ -163,6 +164,9 @@ insertManyReturning t ws ret =
 update :: Table w r -> (r -> w) -> (r -> Column PGBool) -> Transaction Int64
 update t r2w predicate =  withConnIO (\c -> runUpdate c t r2w predicate)
 
+-- | See 'runUpdateEasy'.
+updateEasy :: Default Updater r w => Table w r -> (r -> r) -> (r -> Column PGBool) -> Transaction Int64
+updateEasy t r2w predicate =  withConnIO (\c -> runUpdateEasy c t r2w predicate)
 
 -- | Update items in a 'Table' with a return value.  See 'runUpdateReturning'.
 updateReturning
